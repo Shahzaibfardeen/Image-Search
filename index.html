@@ -1,44 +1,82 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html>
   <head>
-    <meta charset="utf-8">
-    <title> Contact Form </title>
-    <link rel="stylesheet" href=Backends/Css/Styles.css>
-    <link rel="icon" href="favicon.ico">
+      <meta charset="utf-8" />
+          <title> Search Any Images </title>
+
+              <link rel="stylesheet" href="/styles.css">
+              <link rel="icon" href="favicon.ico">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
+        <script src='https://kit.fontawesome.com/1aefc2e99c.js' crossorigin='anonymous'></script>
   </head>
 
- <body>
-   <h2> Contact Form </h2>
+    <body>
+      <center>
+    <header class="head">
+            <h1 align="center"> What Are You Interested In Today ?? </h1>
+      <div class="site-container search">
+          <input
+            id="search-keyword"
+            type="text"
+            name="search-keyword"
+            placeholder="Eg: Android"required/>
+        <i class="fas fa-search"></i>
+      </div>
+    </header>
 
-    <form action="mailto:shahzaibfardeen786@gmail.com" method="post" enctype="text/plain">
 
-      <p class="Name" >
-            <input type="text" name="name" id="name" placeholder="Your Name" value=""/>
-    </p>
+    <div class="site-container">
+      <div id="response-container"></div>
+    </div>
 
-     <p class="Email" >
-          <input type="text" name="email" id="email" placeholder="Your Email I'D" value=""/>
-      </p>
 
-      <p class="Web Site" >
-         <input type="text" name="web" id="web" placeholder="Link To Your Web Site" value=""/>
-     </p>
+    <script >document.querySelectorAll("i")[0].addEventListener("click", req);
+const responseContainer = document.querySelector("#response-container");
 
-     <p class="Text">
-        <textarea name="text" placeholder=""rows="10" cols="100">
-                    </textarea>
-     </p>
+let searchedForText;
 
-     <p class="submit">
-       <input type="submit" name="" value="Send">
-      </p>
-        </form>
+let unsplashRequest = new XMLHttpRequest();
 
-        <div style="float: Absolute;
-                    color: Black;
-                    font-weight: bold;
-                    font- size: 20px;">
-        Designed By Shazz </div>
+function req() {
+  searchedForText = document.querySelector("#search-keyword").value;
+  unsplashRequest.open(
+    "GET",
+    `https://api.unsplash.com/search/photos?page=1&query=${searchedForText}`);
+  unsplashRequest.onload = addImage;
+  unsplashRequest.onerror= error;
+  unsplashRequest.setRequestHeader(
+    "Authorization",
+    "Client-ID iUo0rk3sBOmMRMExqB0U5rMfS8s7Bp31ykYYYHkcTlw");
+  unsplashRequest.send();
+}
 
+function addImage() {
+  var rp = JSON.parse(unsplashRequest.response);
+  if ( rp.results.length >0) {
+    if (rp.results.length > 30) {
+      rp.results.length = 30;
+    }
+    responseContainer.innerHTML = "";
+    for (result of rp.results)
+    {
+      responseContainer.innerHTML += `
+ <figure>
+  <img src='${result.urls.small}' alt='${searchedForText}'>
+  <figcaption>${searchedForText} by ${result.user.name}</figcaption>
+  </figure>`;
+    }
+  }
+
+  else{
+      responseContainer.innerHTML = "<h2>No results </h2>";
+  }
+}
+function error() {
+    responseContainer.innerHTML = "<h2>Sorry Limit Reached For This Hour<br/> Try Next Hour  </h2>";
+}
+
+</script>
+</center>
   </body>
 </html>
