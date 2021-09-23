@@ -6,5 +6,4 @@ This Repository Contains Images API. You Can Search AnyThing You Like
 * [Web-Page](https://shahzaibfardeen.github.io/Image-Search/)
 
 ### The Way The Web Page Look 
-
 ![Web_Page_Image](Project.png)
